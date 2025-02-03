@@ -37,7 +37,7 @@ app.post('/access-deepseek', async (req, res) => {
         }else {
             res.json({
                 status: false,
-                error: "Please ensure you have sent an profession name, and your string is not empty"
+                error: "Please ensure you have sent a profession name, and your string is not empty"
             })
         }
 
