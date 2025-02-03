@@ -1,0 +1,17 @@
+import ollama
+import re
+import sys
+import json
+
+# Get prompt from command-line arguments
+if len(sys.argv) > 1:
+    Myprompt = sys.argv[1]
+else:
+    Myprompt = "Default prompt"
+
+model = "deepseek-r1:7b"
+answer = ollama.generate(model=model, prompt=Myprompt)
+only_ans = re.sub(r".*</think>\s*", "", answer["response"])
+
+output = {"DeepSeek": only_ans}
+print(json.dumps(output))  # Print JSON output
