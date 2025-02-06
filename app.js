@@ -5,7 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const { constTant } = require("./constant");
 const { accessDeepseekMiddleware } = require("./middlewares/accessDeepseek.middleware");
-const { accessDeepseekController } = require("./routes/accessDeepseek.controller");
+const { professionalSummaryController } = require("./routes/professionalSummary.controller");
 
 const app = express()
 app.use(morgan('dev'));
@@ -18,7 +18,8 @@ app.get('/', (req, res) => {
     res.send('welcome to AI CVBUILDER BACKEND');
 });
 
-app.post('/access-deepseek', accessDeepseekMiddleware, accessDeepseekController);
+app.post('/professional-summary-ai', accessDeepseekMiddleware, professionalSummaryController);
+app.post('/employment-history-ai', accessDeepseekMiddleware, professionalSummaryController);
 
 const port = constTant.port || 3000;
 

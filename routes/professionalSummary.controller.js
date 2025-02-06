@@ -1,33 +1,7 @@
 const { exec } = require("child_process");
 const path = require("path");
 const { fileURLToPath } = require("url");
-
-exports.deepSeekCalled = async(myPrompt)=> {
-    const scriptPath = path.join(__dirname, "jsseek.py");
-    return new Promise((resolve, reject) => {
-        exec(`python "${scriptPath}" "${myPrompt}"`, (error, stdout, stderr) => {
-            if (error) {
-                console.error(`Error: ${error.message}`);
-                reject({ error: "Execution failed" });
-                return;
-            }
-            if (stderr) {
-                console.error(`stderr: ${stderr}`);
-                reject({ error: stderr });
-                return;
-            }
-            try {
-                const result = JSON.parse(stdout);
-                console.log("DeepSeek Response:", result.DeepSeek);
-                resolve(result);
-            } catch (err) {
-                console.error("Invalid JSON output:", stdout);
-                reject({ error: "Invalid JSON response" });
-            }
-        });
-    });
-}
-
+const { deepSeekCalled } = require("../libs/accessDeepseek");
 
 exports.getDeepSeekCareerobjective = async (profession, yearsOfExprience = null, skills = null) => {
     console.log("3.getDeepSeekCareerobjective --- called")
@@ -47,13 +21,11 @@ exports.getDeepSeekCareerobjective = async (profession, yearsOfExprience = null,
 
     console.log({myPrompt})
 
-    const data = await this.deepSeekCalled(myPrompt)
+    const data = await deepSeekCalled(myPrompt)
 
-    return data;
-    //  deepSeekCalled(myPrompt);
-  
+    return data;  
 };
-exports.accessDeepseekController = async(req, res) =>{
+exports.professionalSummaryController = async(req, res) =>{
     try {
 
         const profession = req.body.profession || null
