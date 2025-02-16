@@ -1,6 +1,5 @@
 const http = require("http");
 const express = require("express");
-const ngrok = require("@ngrok/ngrok");
 const morgan = require("morgan");
 const cors = require("cors");
 const bodyParser = require("body-parser");
@@ -24,16 +23,6 @@ app.post('/professional-summary-ai', accessDeepseekMiddleware, professionalSumma
 app.post('/employment-history-ai', accessDeepseekMiddleware, accessDeepseekEmploymentHistoryController);
 
 const port = constTant.port || 3000;
-
-(async function () {
-	const listener = await ngrok.forward({
-		addr: port,
-		authtoken_from_env: true,
-		domain: "http://localhost:3002",
-	});
-
-	console.log(`Ingress established at: ${listener.url()}`);
-})();
 
 app.listen(port, () => {
     console.log(`Server listening on port ${port}`);
