@@ -1,47 +1,34 @@
-const { exec } = require("child_process");
-const path = require("path");
-const { fileURLToPath } = require("url");
 const { deepSeekCalled } = require("../libs/accessDeepseek");
 
-exports.getDeepSeekCareerobjective = async (profession, yearsOfExprience = null, skills = null) => {
-    console.log("3.getDeepSeekCareerobjective --- called")
-    let myPrompt = `Write a concise, professional first-person summary for a ${profession} in one paragraph (strictly 100 words). Use a natural, confident tone and avoid generic phrases. Focus on: 
-    - Core expertise and industry-specific value
-    - Quantifiable achievements (if implied by experience/skills)
-    - Relevant skills applied in real-world contexts
-    - Avoid clichés like "team player" or "results-driven." Write as if the ${profession} is speaking directly. Use present tense and first-person pronouns. Example: "I design..." instead of "He designs...".`;
-    
-    if (yearsOfExprience && skills) {
-      myPrompt += ` Highlight ${yearsOfExprience} years of experience in ${profession}, emphasizing expertise in ${skills}. Mention 1-2 brief examples of how these skills solved problems or delivered results.`;
-    } else if (yearsOfExprience) {
-      myPrompt += ` Showcase ${yearsOfExprience} years of experience, focusing on key achievements or specialization areas (e.g., "I have streamlined workflows for 50+ clients..." instead of "experienced").`;
-    } else if (skills) {
-      myPrompt += ` Prioritize the skills: ${skills}. Demonstrate their practical application (e.g., "I leverage ${skills.split(', ')[0]} to develop...").`;
+exports.getDeepSeekEmploymentHistory = async (profession, jobtitle = null) => {
+    let myPrompt = `Generate a concise employment history for a ${profession} professional`;
+
+    if (jobtitle) {
+        myPrompt += ` specifically for the ${jobtitle} role`;
     }
 
-    console.log({myPrompt})
+    myPrompt += `. List 2-3 core responsibilities and 1 key achievement, using brief bullet points. Keep the entire response under 100 words.`;
 
-    const data = await deepSeekCalled(myPrompt)
-
-    return data;  
+    const data = await deepSeekCalled(myPrompt);
+    return data;
 };
-exports.accessDeepseekController = async(req, res) =>{
+exports.accessDeepseekEmploymentHistoryController = async (req, res) => {
     try {
 
         const profession = req.body.profession || null
 
-        const { yearsOfExprience = null, skills = null } = req.query
+        const { jobtitle = null } = req.query
 
         console.log("headers --> ", req.query)
         console.log("1.body--> ", req.body.profession)
 
         if (profession && profession.length > 0) {
             console.log("2. profession -->  inside  condition", profession)
-            const data = await this.getDeepSeekCareerobjective(profession, yearsOfExprience, skills);
+            const data = await this.getDeepSeekEmploymentHistory(profession, jobtitle);
             // console.log(data)
             res.json({
                 status: true,
-                objective: data.DeepSeek || "No onjectives found"
+                employment_history: data.DeepSeek || "No onjectives found"
             })
         } else {
             res.json({

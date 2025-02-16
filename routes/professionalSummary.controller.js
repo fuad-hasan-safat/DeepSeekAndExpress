@@ -1,6 +1,3 @@
-const { exec } = require("child_process");
-const path = require("path");
-const { fileURLToPath } = require("url");
 const { deepSeekCalled } = require("../libs/accessDeepseek");
 
 exports.getDeepSeekCareerobjective = async (profession, yearsOfExprience = null, skills = null) => {
@@ -41,7 +38,7 @@ exports.professionalSummaryController = async(req, res) =>{
             // console.log(data)
             res.json({
                 status: true,
-                objective: data.DeepSeek || "No onjectives found"
+                professional_summary: data.DeepSeek || "No onjectives found"
             })
         } else {
             res.json({
